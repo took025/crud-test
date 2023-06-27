@@ -1,0 +1,47 @@
+<section>
+  <div class="container">
+    <div class="my-5 d-flex justify-content-between" *ngIf="usersList?.length">
+      <h3>users</h3>
+      <button (click)="openModal(addUserTemplate , false)" class="btn btn-primary">პიროვნების დამატება</button>
+    </div>
+    <div class="d-flex flex-column align-items-center mt-5" *ngIf="!usersList?.length">
+      პიროვნება ჯერ არ დაგიმატებიათ? მაშინ დაკლიკე და ჩაირიცხე ^_^
+      <button (click)="openModal(addUserTemplate , false)" class="btn btn-primary mt-3">პიროვნების დამატება</button>
+    </div>
+    <table class="table" *ngIf="usersList?.length">
+      <thead>
+        <tr>
+          <th scope="col">სახელი</th>
+          <th scope="col">გვარი</th>
+          <th scope="col">სქესი</th>
+          <th scope="col">action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of usersList ; trackBy: trackByFn">
+          <th>{{user.firstName}}</th>
+          <td>{{user.lastName}}</td>
+          <td>{{user.gender}}</td>
+          <td>
+            <img (click)="openModal(addUserTemplate , true , user)" class="mx-1 pointer"
+              src="../../../assets/images/fi-br-pencil.svg" alt="">
+            <img (click)="deleteUser(user)" class="mx-1 pointer" src="../../../assets/images/fi-br-trash.svg" alt="">
+          </td>
+        </tr>
+        <tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<ng-template #addUserTemplate let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{editMode ? 'პიროვნები შეცვლა' : ' პიროვნების დამატება'}}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-add-update-user (addSuccess)="getData()" [user]="selectedUser" [editMode]="editMode"></app-add-update-user>
+  </div>
+</ng-template>

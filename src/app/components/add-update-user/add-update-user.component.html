@@ -1,0 +1,60 @@
+<form [formGroup]="addUserForm" class="d-block">
+    <div class="mb-3 form-group">
+        <label for="firstName" class="form-label">სახელი</label>
+        <input
+            [ngClass]="{'is-invalid': addUserForm.controls.firstName.touched && !addUserForm.controls.firstName.value}"
+            formControlName="firstName" type="text" class="form-control" id="firstName" placeholder="შეიყვანეთ სახელი">
+            <span class="text-danger"
+                *ngIf="addUserForm.controls.firstName.touched &&  !addUserForm.controls.firstName.value">ჩაწერეთ სახელი</span>
+    </div>
+    <span class="text-danger"
+        *ngIf="addUserForm.controls.firstName.errors?.letterValidate &&  addUserForm.controls.firstName.value">შეიყვანეთ
+        მხოლოდ ასოები</span>
+    <div class="mb-3 form-group">
+        <label for="lastName" class="form-label">გვარი</label>
+        <input [ngClass]="{'is-invalid': addUserForm.controls.lastName.touched && !addUserForm.controls.lastName.value}"
+            formControlName="lastName" type="text" class="form-control" id="lastName" placeholder="შეიყვანეთ გვარი">
+            <span class="text-danger"
+                *ngIf="addUserForm.controls.lastName.errors?.letterValidate &&  addUserForm.controls.lastName.value">შეიყვანეთ
+                მხოლოდ ასოები</span>
+            <span class="text-danger"
+                *ngIf="addUserForm.controls.lastName.touched &&  !addUserForm.controls.lastName.value">ჩაწერეთ გვარი</span>
+    </div>
+    <div class="form-group">
+        <label for="gender" class="form-label">სქესი</label>
+        <div class="form-floating">
+            <select
+                [ngClass]="{'is-invalid': addUserForm.controls.gender.touched && !addUserForm.controls.gender.value}"
+                class="form-select" formControlName="gender" id="gender" aria-label="Floating label select example">
+                <option selected disabled>Open this select menu</option>
+                <option value="male">MALE</option>
+                <option value="female">FEMALE</option>
+            </select>
+            <label for="floatingSelect">აირჩიე სქესი</label>
+        </div>
+        <span class="text-danger"
+                *ngIf="addUserForm.controls.gender.touched &&  !addUserForm.controls.gender.value">გთხოვთ, აირჩიოთ ერთ-ერთი მნიშვნელობა</span>
+    </div>
+    <button [disabled]="!addUserForm.valid" type="submit" (click)="onClickAdd(resultTemplate)"
+        class="btn btn-primary w-100 mt-3">{{editMode? 'განახლება' :  'დამატება'}}</button>
+</form>
+
+<ng-template #resultTemplate let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">პიროვნების {{editMode? 'განახლება' :  'დამატება'}}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body d-flex flex-column align-items-center">
+        <div>
+            <img *ngIf="!errortext" src="../../../assets/images/succes.svg" alt="succes-icon">
+            <img *ngIf="errortext" src="../../../assets/images/error.svg" alt="fail-icon">
+        </div>
+        <span class="text-success" [ngClass]="{'text-danger': errortext}">{{errortext ? errortext : (editMode ?  'პიროვნება წარმატებით განახლდა' : 'პიროვნება წარმატებით დაემატა')}}</span>
+    </div>
+    <div class="modal-footer">
+        <button class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"
+            class="btn w-100 btn-primary">დახურვა</button>
+    </div>
+</ng-template>
