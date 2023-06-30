@@ -8,6 +8,7 @@ import {
   ModalDismissReasons,
   NgbModalOptions,
 } from "@ng-bootstrap/ng-bootstrap";
+import { takeWhile } from "rxjs";
 @Component({
   selector: "app-add-update-user",
   templateUrl: "./add-update-user.component.html",
@@ -19,6 +20,7 @@ export class AddUpdateUserComponent {
   @Input() user?: User;
   @Output() addSuccess: EventEmitter<any> = new EventEmitter<any>();
   errortext = null;
+  isAlive = true;
   modalOptions: NgbModalOptions = {
     backdrop: "static",
     backdropClass: "customBackdrop",
@@ -50,32 +52,42 @@ export class AddUpdateUserComponent {
         id: this.user?._id,
         data: this.addUserForm.getRawValue(),
       };
-      this.mainService.EditUser(payload).subscribe(
-        (res) => {
-          this.addSuccess.emit();
-          this.addUserForm.reset();
-          this.errortext = null;
-        },
-        (error: any) => {
-          this.errortext = error.statusText;
-        }
-      );
+      this.mainService
+        .EditUser(payload)
+        .pipe(takeWhile(() => this.isAlive))
+        .subscribe(
+          (res) => {
+            this.addSuccess.emit();
+            this.addUserForm.reset();
+            this.errortext = null;
+          },
+          (error: any) => {
+            this.errortext = error.statusText;
+          }
+        );
     } else {
-      this.mainService.addUser(this.addUserForm.getRawValue()).subscribe(
-        (res) => {
-          this.addSuccess.emit();
-          this.addUserForm.reset();
-          this.errortext = null;
-        },
-        (error: any) => {
-          this.errortext = error.statusText;
-        }
-      );
+      this.mainService
+        .addUser(this.addUserForm.getRawValue())
+        .pipe(takeWhile(() => this.isAlive))
+        .subscribe(
+          (res) => {
+            this.addSuccess.emit();
+            this.addUserForm.reset();
+            this.errortext = null;
+          },
+          (error: any) => {
+            this.errortext = error.statusText;
+          }
+        );
     }
     this.openModal(content);
   }
 
   openModal(content: any) {
     this.modalService.open(content, this.modalOptions);
+  }
+
+  ngOnDestroy(): void {
+    this.isAlive = false;
   }
 }
