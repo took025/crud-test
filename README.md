@@ -1,3 +1,6 @@
+# forStart
+    to make requests first of all api key must be replaced , key can eb copied for free from (https://crudcrud.com/) ;
+    
 # CrudTest
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.0.2.
