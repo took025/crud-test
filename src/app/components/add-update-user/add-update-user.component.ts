@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { User } from "src/app/core/interface";
 import { MainService } from "src/app/core/main.service";
@@ -13,6 +13,7 @@ import { takeWhile } from "rxjs";
   selector: "app-add-update-user",
   templateUrl: "./add-update-user.component.html",
   styleUrls: ["./add-update-user.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddUpdateUserComponent {
   addUserForm: FormGroup;

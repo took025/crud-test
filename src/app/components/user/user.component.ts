@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { takeWhile } from "rxjs";
 import { User } from "src/app/core/interface";
@@ -14,6 +14,7 @@ import {
   selector: "app-user",
   templateUrl: "./user.component.html",
   styleUrls: ["./user.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserComponent {
   addUserForm: FormGroup;
@@ -28,7 +29,8 @@ export class UserComponent {
   };
   constructor(
     private mainServie: MainService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private detection: ChangeDetectorRef
   ) {}
   ngOnInit(): void {
     this.addUserForm = new FormGroup({
@@ -45,6 +47,7 @@ export class UserComponent {
       .pipe(takeWhile(() => this.isAlive))
       .subscribe((res: User[]) => {
         this.usersList = res;
+        this.detection.markForCheck();
       });
   }
 
